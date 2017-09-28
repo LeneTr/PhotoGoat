@@ -30,7 +30,6 @@ class Controller {
         if($this->CurrentUser){
             return TRUE;
         }
-        
         return FALSE;
     }
 
@@ -186,12 +185,22 @@ class Controller {
         }
     }
     
+    //!!!!
     public function signOut(){
         
     }
 
     public function signUp($firstname, $email, $password){
-        
+         if(!$this->isLoggedIn()
+                && DataValidation::str($firstname, 32)
+                && DataValidation::emailAdress($email)
+                && DataValidation::str($password, 128)){
+            
+            if($this->dbCon->createUser($firstname, $email, $password)){
+                $this->signIn($email, $password);
+                return TRUE;
+            }
+        }
+        return FALSE;
     }
-    
 }
